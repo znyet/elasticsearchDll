@@ -1,0 +1,32 @@
+1、控制台启动
+elasticsearch
+
+2、服务启动
+elasticsearch-service install
+elasticsearch-service start
+elasticsearch-service stop
+elasticsearch-service remove
+
+3、配置内存等信息
+elasticsearch-service manager
+
+最大不要超过32G  min=32=max 最好是物理内存的60%
+
+
+-----------------------------------------------------------
+config ----------> elasticsearch.yml
+Network
+
+1、允许所有ip连接
+network.host: 0.0.0.0
+2、允许多个ip连接
+network.host: [127.0.0.1,192.168.1.176]
+
+----------------------------------------------
+
+允许plugin head连接
+network.host: 0.0.0.0
+http.cors.enabled: true
+http.cors.allow-origin: "*"
+#http.cors.allow-headers: Authorization
+

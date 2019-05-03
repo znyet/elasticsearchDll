@@ -1,0 +1,12 @@
+https://github.com/medcl/elasticsearch-analysis-ik/releases
+
+一、离线安装
+1、create plugin folder 
+cd your-es-root/plugins/ && mkdir ik
+
+2、unzip plugin to folder 
+your-es-root/plugins/ik
+
+二、在线安装
+
+./bin/elasticsearch-plugin install https://github.com/medcl/elasticsearch-analysis-ik/releases/download/v5.6.13/elasticsearch-analysis-ik-5.6.13.zip

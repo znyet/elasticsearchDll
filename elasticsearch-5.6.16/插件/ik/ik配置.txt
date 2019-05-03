@@ -1,0 +1,60 @@
+ 假设读者已经安装好ES，如果没有的话，请参考ElasticSearch入门 —— 集群搭建。安装IK分词需要的资源可以从这里下载，整个安装过程需要三个步骤：
+    1、获取分词的依赖包
+    通过git clone https://github.com/medcl/elasticsearch-analysis-ik，下载分词器源码，然后进入下载目录，执行命令：mvn clean package，打包生成elasticsearch-analysis-ik-1.2.5.jar。将这个jar拷贝到ES_HOME/plugins/analysis-ik目录下面，如果没有该目录，则先创建该目录。
+    2、ik目录拷贝
+    将下载目录中的ik目录拷贝到ES_HOME/config目录下面。
+    3、分词器配置
+    打开ES_HOME/config/elasticsearch.yml文件，在文件最后加入如下内容：
+
+index:  
+  analysis:                     
+    analyzer:        
+      ik:  
+          alias: [ik_analyzer]  
+          type: org.elasticsearch.index.analysis.IkAnalyzerProvider  
+      ik_max_word:  
+          type: ik  
+          use_smart: false  
+      ik_smart:  
+          type: ik  
+          use_smart: true  
+
+=====================================================================================
+elasticsearch.yml文件里定义，内容大致如下：
+index:  
+  analysis:                     
+    analyzer:        
+      ikAnalyzer:  
+          alias: [ik]  
+          type: org.elasticsearch.index.analysis.IkAnalyzerProvider 
+
+
+如果我们想返回最细粒度的分词结果，需要在elasticsearch.yml中配置如下：
+
+index:
+  analysis:
+    analyzer:
+      ik:
+          alias: [ik_analyzer]
+          type: org.elasticsearch.index.analysis.IkAnalyzerProvider
+      ik_smart:
+          type: ik
+          use_smart: true
+      ik_max_word:
+          type: ik
+          use_smart: false
+
+==============================================================================
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">  
+<properties>  
+	<comment>IK Analyzer 扩展配置</comment>
+	<!--用户可以在这里配置自己的扩展字典 -->
+	<entry key="ext_dict">custom/mydict.dic;custom/single_word_low_freq.dic</entry> 	
+	 <!--用户可以在这里配置自己的扩展停止词字典-->
+	<entry key="ext_stopwords">custom/ext_stopword.dic</entry> 
+ 	<!--用户可以在这里配置远程扩展字典 -->
+	<entry key="remote_ext_dict">location</entry> 
+ 	<!--用户可以在这里配置远程扩展停止词字典-->
+	<entry key="remote_ext_stopwords">location</entry> 
+</properties>

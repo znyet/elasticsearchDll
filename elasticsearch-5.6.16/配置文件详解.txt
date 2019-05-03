@@ -1,0 +1,228 @@
+https://blog.csdn.net/w3045872817/article/details/78884678
+
+Ø Cluster
+
+    cluster.name
+    集群名称，如果有多个集群，那么每个集群名就得是唯一的。
+
+Ø Node
+
+    1．node.data
+
+    集群中的节点名称，比如前面说的82、83、84三台机子每台都有一个名称，你也可以不设这个名称，默认的集群启动时会自己给每个节点初始化一个名称，但强烈建议这里还是由自己设置比较好。
+
+    2．node.master
+
+    该节点是否是master，true表示是的，false表示否，默认是true.
+
+    3．node.data
+
+    该节点是否存储数据，默认true表示是的。
+
+    说明：对于上面两个节点，如果你希望该节点只是一个master，但不存储数据，则应当设置为：
+
+    node.master: true
+
+    node.data: false
+
+    如果你希望该节点只存储数据，但不是一个master，则应该设置：
+
+    node.master: false
+
+    node.data: true
+
+    如果你既不希望该节点为一个master，也不想它存储数据，则应该设置为：
+
+    node.master: false
+
+    node.data: false
+
+    这种情况一般是你希望该节点仅仅是作为一个搜索负载均衡器，比如从各节点得到数据，聚合结果等。
+
+Ø Index
+
+    1． index.number_of_shards
+
+    设置一个索引被分成的分片数，默认是5
+
+    2．index.number_of_replicas
+
+    设置一个索引有几个拷贝，默认为1。拷贝指的是其它节点对该节点的拷贝，比如在84上创建了一个索引，那么这个拷贝会存在于82和83上，这是一个分布式的属性。
+
+    拷贝越多，则搜索性能越佳，而分片越多则索引创建性能越好。
+
+Ø Paths
+
+    1．path.conf
+
+    配置文件目录，默认为es根目录下的config目录。
+
+    2．path.data
+
+    索引存储路径，默认为es根目录下的data目录，可以有多个存储路径，各存储路径用逗号隔开，如：path.data: /path/to/data1,/path/to/data2
+
+    3．path.work
+
+    临时文件存放目录，默认为es根目录下的work目录
+
+    4．path.logs
+
+    日志文件存放目录，默认为es根目录下的logs目录。
+
+    5．path.plugins
+
+    插件的安装目录，默认为es根目录下的plugins目录。
+
+Ø Network And HTTP
+
+    1．network.bind_host
+
+    Es节点绑定的地址，为一个ip地址（IPv4或IPv6）
+
+    2．network.publish_host
+
+    Es发布的地址，其它节点通过这个地址与其进行通信
+
+    3．network.host
+
+    该节点网络地址，也是一个ip地址，如果设置了该属性，则network.bind_host与network.publish_host都不用再设置了，比如我这里三台机子设置的值分别为：
+
+    118.200.108.82、118.200.108.83、118.200.108.84。
+
+    4．transport.tcp.port
+
+    节点之间通信的端口，默认为9300，在我们应用程序中调用es的方法提交索引创建时也是使用的这个端口。
+
+    5．http.port
+
+    http访问端口，默认是9200，通过这个端口，调用方可以索引查询请求。
+
+    6．http.max_content_length
+
+    设置内容的最大容量，默认是100MB
+
+    7．http.enabled
+
+    是否禁止http访问，默认是false。
+
+Ø Discovery
+
+    1 discovery.zen.minimum_master_nodes
+
+    设置这个参数来保证集群中的节点可以知道其它N个有master资格的节点。默认为1，对于大的集群来说，可以设置大一点的值（2-4）。
+
+    2 discovery.zen.ping.timeout
+
+    设置集群中自动发现其它节点时ping连接超时时间，默认为3秒，对于比较差的网络环境可以高点的值来防止自动发现时出错
+
+    3 discovery.zen.ping.multicast.enabled
+
+    设置是否打开多播来发现来发现节点，默认是true
+
+    4 discovery.zen.ping.unicast.hosts
+
+	
+-------------------------------------------------------------------------------------------------------------------------
+https://blog.csdn.net/deliciousion/article/details/78072230
+
+1.Cluster集群
+
+# ---------------------------------- Cluster -----------------------------------
+#
+# Use a descriptive name for your cluster:
+#
+#cluster.name: my-application
+#
+这块主要是设置集群的，cluster.name指定集群的名称，同一个集群的节点要设置在同一个集群名称。如果不配置该项，系统默认取elasitcsearch。
+2.Node节点
+
+ ------------------------------------ Node ------------------------------------
+#
+# Use a descriptive name for the node:
+#
+#node.name: node-1
+#
+# Add custom attributes to the node:
+#
+#node.attr.rack: r1
+这一部分主要是设置节点的。node.name指定节点的名称，同一集群的节点名称不能相同，如果不配置该项，系统会随机分配一个名称。
+node.attr.rack指定节点的部落属性，这是一个比集群更大的范围。
+
+node.master指定是否为主节点。该属性可不指定，节点之间自主选举。
+
+node.data指定是否存储数据（数据节点）
+
+3.Path路径
+
+# ----------------------------------- Paths ------------------------------------
+#
+# Path to directory where to store the data (separate multiple locations by comma):
+#
+#path.data: /path/to/data
+#
+# Path to log files:
+#
+#path.logs: /path/to/logs
+这一部分是关于数据和日志的存放路径的，这两个设置十分重要，因为比如要进行版本升级，如果程序与数据分离，将非常容易实现。程序的崩溃也不影响数据。
+如果不配置这两项，这两个目录将在ES的主目录下创建。
+
+4.Memory内存
+
+# ----------------------------------- Memory -----------------------------------
+#
+# Lock the memory on startup:
+#
+#bootstrap.memory_lock: true
+#
+# Make sure that the heap size is set to about half the memory available
+# on the system and that the owner of the process is allowed to use this
+# limit.
+#
+# Elasticsearch performs poorly when the system is swapping the memory.
+这一部分是设置内存的。bootstrap.memory_lock，启动后是否锁定内存，提高ES的性能。
+5.Network
+
+# ---------------------------------- Network -----------------------------------
+#
+# Set the bind address to a specific IP (IPv4 or IPv6):
+#
+#network.host: 192.168.0.1
+#
+# Set a custom port for HTTP:
+#
+#http.port: 9200
+#
+# For more information, consult the network module documentation.
+这一部分是有关网络的设置，比如RESTful接口，包括curl、浏览器、Kibana等HTTP连接过来的，都是通过这里设置。
+network.host设置对外的网关IP，默认本地回环。
+
+http.port设置对外的端口，端口建议重新设置，提高安全性。默认9200
+
+transport.tcp.port 设置TCP传输端口，这个端口也非常重要，首先，下面Discovery部分的设置，集群内节点发现走的就是这个端口，发现后，节点之前传输数据也是走这个TCP端口，另外，官方提供的ES JAVA API也是通过这个端口传输数据的。
+
+6.Discovery
+
+# --------------------------------- Discovery ----------------------------------
+#
+# Pass an initial list of hosts to perform discovery when new node is started:
+# The default list of hosts is ["127.0.0.1", "[::1]"]
+#
+#discovery.zen.ping.unicast.hosts: ["host1", "host2"]
+#
+# Prevent the "split brain" by configuring the majority of nodes (total number of master-eligible nodes / 2 + 1):
+#
+#discovery.zen.minimum_master_nodes: 3
+#
+# For more information, consult the zen discovery module documentation.
+这一部分主要设置集群的节点之间的连接的，所以叫发现，
+discovery.zen.ping.unicast.hosts设置集群内节点的主机，比如集群内有两台机192.168.2.1，192.168.2.2，TCP端口都设置为9300
+
+那么两个节点关于这一项的配置都应该设置成如下这样，有多少台就设置多少个，而且用的是TCP端口。
+
+discovery.zen.ping.unicast.hosts: ["192.168.2.1:9300", "192.168.2.2:9300"]
+--------------------- 
+作者：small小阮 
+来源：CSDN 
+原文：https://blog.csdn.net/deliciousion/article/details/78072230 
+版权声明：本文为博主原创文章，转载请附上博文链接！
+	

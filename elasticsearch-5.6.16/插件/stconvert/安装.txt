@@ -1,0 +1,10 @@
+https://github.com/medcl/elasticsearch-analysis-stconvert
+
+简体繁体转换
+
+一、离线安装
+plugins新建文件夹analysis-stconvert
+解压zip
+
+二、在线安装
+./bin/elasticsearch-plugin install https://github.com/medcl/elasticsearch-analysis-stconvert/releases/download/v5.6.13/elasticsearch-analysis-stconvert-5.6.13.zip
