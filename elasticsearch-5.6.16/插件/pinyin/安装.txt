@@ -5,4 +5,4 @@ plugins新建文件夹analysis-pinyin
 解压zip
 
 二、在线安装
-./bin/elasticsearch-plugin install https://github.com/medcl/elasticsearch-analysis-pinyin/releases/download/v5.6.13/elasticsearch-analysis-pinyin-5.6.13.zip
+./bin/elasticsearch-plugin install https://github.com/medcl/elasticsearch-analysis-pinyin/releases/download/v5.6.16/elasticsearch-analysis-pinyin-5.6.16.zip
